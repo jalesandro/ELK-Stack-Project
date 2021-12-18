@@ -63,6 +63,7 @@ The following screenshot displays the result of running `docker ps` after succes
 ![Docker_PS](https://user-images.githubusercontent.com/87720740/146648288-864ba995-6232-4eb7-921f-487c616972a8.jpg)
 
 The playbook is duplicated below.
+
 ---
 # install_elk.yml
 - name: Configure Elk VM with Docker
@@ -113,6 +114,8 @@ The playbook is duplicated below.
           - 5601:5601
           - 9200:9200
           - 5044:5044
+
+
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
 - _TODO: List the IP addresses of the machines you are monitoring_
