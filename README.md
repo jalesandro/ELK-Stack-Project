@@ -67,6 +67,7 @@ The following screenshot displays the result of running `docker ps` after succes
 
 The playbook is duplicated below.
 
+```
 ---
 # install_elk.yml
 - name: Configure Elk VM with Docker
@@ -117,6 +118,7 @@ The playbook is duplicated below.
           - 5601:5601
           - 9200:9200
           - 5044:5044
+```
     
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines: Web-1 and Web-2 at 10.0.0.5 and 10.0.0.6, respectively.
@@ -124,6 +126,46 @@ This ELK server is configured to monitor the following machines: Web-1 and Web-2
 We have installed FileBeat on this machine.
 
 This Beat allows us to detect changes to the filesystem and collect Apache logs.
+
+The playbook below installs FileBeat on the target hosts.
+```
+---
+- name: Installing and launch filebeat
+  hosts: webservers
+  become: yes
+  tasks:
+
+    # Use command module
+ 
+  - name: Download filebeat .deb file
+    command: curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.1-amd64.deb
+
+    # Use command module 
+
+  - name: Install filebeat
+    command: dpkg -i filebeat-7.6.1-amd64.deb
+
+    # Use copy module
+
+  - name: Drop in filebeat.yml
+    copy: 
+      src: /etc/ansible/files/filebeat-config.yml
+      dest: /etc/filebeat/filebeat.yml
+
+  - name: Enable and configure the system module
+    command: filebeat modules enable system
+
+  - name: setup filebeat
+    command: filebeat setup
+
+  - name: start filebbeat service
+    command: service filebeat start
+
+  - name: enable service filebeat on boot
+    systemd:
+      name: filebeat
+      enabled: yes
+```
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
